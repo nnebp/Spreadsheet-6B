@@ -1,4 +1,3 @@
-
 /**
  * Abstract class Token - write a description of the class here
  * 
@@ -9,6 +8,5 @@ public abstract class Token
 {
     // instance variables - replace the example below with your own
     private int x;
-
 
 }
