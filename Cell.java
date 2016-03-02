@@ -1,335 +1,436 @@
-/**
- * Class that represents an individual cell in the spreadsheet. Stores the 
- * formula as a String and the value of the cell. Stores the address of the cell 
- * in a CellToken object. Also stores the in-degree and current in-degree 
- * (for the topological sort). The addresses of the nodes that must be 
- * evaluated before this node are stored in the dependencies linked list.
- * The addresses of the nodes that are dependent on this cell are also stored in
- * a linked list (dependentCells).
- * 
- * @author Sandeep Heera
- *
- */
-
-import java.util.Iterator;
-import java.util.LinkedList;
-
+import java.util.*;
 public class Cell {
-	private String formula;
-	private CellToken cellAddress;
-	private int value, inDegree, currentInDegree;
-	private LinkedList<CellToken> dependencies, dependentCells;
-	
-	/**
-	 * Default constructor.
-	 * 
-	 * @param row the row of this cell
-	 * @param column the column of this cell
-	 */
-	public Cell(int row, int column) {
-		cellAddress = new CellToken(row, column);
-		formula = "";
-		value = 0;
-		inDegree = 0;
-		currentInDegree = 0;
-		dependencies = new LinkedList<CellToken>();
-		dependentCells = new LinkedList<CellToken>();
-	}
-	
-	/**
-	 * Returns the formula of this cell.
-	 * 
-	 * @return formula of this cell
-	 */
-	public String getFormula() {
-		return formula;
-	}
-	
-	/**
-	 * Returns the value of this cell.
-	 * 
-	 * @return value of this cell
-	 */
-	public int getValue() {
-		return value;
-	}
-	
-	/**
-	 * Returns the in-degree of this cell.
-	 * 
-	 * @return the in-degree of this cell
-	 */
-	public int getInDegree() {
-		return inDegree;
-	}
-	
-	/**
-	 * Returns the current in-degree of this cell. this is used
-	 * for the topological sort algorithm in Spreadsheet.java.
-	 * 
-	 * @return current in-degree of this cell
-	 */
-	public int getCurrentInDegree() {
-		return currentInDegree;
-	}
-	
-	/**
-	 * Return the cell address of this cell.
-	 * 
-	 * @return cell token of this cell
-	 */
-	public CellToken getCellAddress() {
-		return cellAddress;
-	}
-	
-	/**
-	 * Sets the formula of this cell to the input.
-	 * 
-	 * @param formula the new formula of this cell
-	 */
-	public void setFormula(String formula) {
-		this.formula = formula;
-	}
-	
-	/**
-	 * Sets the value of this cell to the input.
-	 * 
-	 * @param newValue the new value for this cell
-	 */
-	public void setValue(int newValue) {
-		value = newValue;
-	}
-	
-	/**
-	 * Sets the in-degree of this cell to the input.
-	 * 
-	 * @param newInDegree the new in-degree for this cell
-	 */
-	public void setInDegree(int newInDegree) {
-		inDegree = newInDegree;
-	}
-	
-	/**
-	 * Sets the current in-degree of this cell to the input.
-	 * 
-	 * @param newCurrentInDegree the new current in-degree for 
-	 * this cell
-	 */
-	public void setCurrentInDegree(int newCurrentInDegree) {
-		currentInDegree = newCurrentInDegree;
-	}
-	
-	/**
-	 * Returns an iterator pointing to the first element in the dependencies
-	 * linked list.
-	 * 
-	 * @return an iterator pointing to the first element in dependencies
-	 */
-	public Iterator<CellToken> getDependenciesIterator() {
-		return dependencies.iterator();
-	}
-	
-	/**
-	 * Returns an iterator pointing to the first element in the dependent cells
-	 * linked list.
-	 * 
-	 * @return an iterator pointing to the first element in dependent cells
-	 */
-	public Iterator<CellToken> getDependentCellsIterator() {
-		return dependentCells.iterator();
-	}
-	
-	/**
-	 * Checks to see if the cell address is present in the dependencies
-	 * linked list.
-	 * 
-	 * @param cellAddress the cell address to search for
-	 * @return true if the cell address is in dependencies and false otherwise
-	 */
-	public boolean dependenciesAddressExists(CellToken cellAddress) {
-		if(dependencies.isEmpty()) {
-			return false;
-		}
-		else{
-			Iterator<CellToken> it = this.getDependenciesIterator();
-			
-			//iterate through the list to see if the CellToken exists
-			while(it.hasNext()) {
-				CellToken check = it.next();
-				if(check.isEqual(cellAddress)) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-	
-	/**
-	 * Checks to see if the cell address is present in the dependent cells
-	 * linked list.
-	 * 
-	 * @param cellAddress the cell address to search for
-	 * @return true if the cell address is in dependent cells and false otherwise
-	 */
-	public boolean dependentAddressExists(CellToken cellAddress) {
-		if(dependentCells.isEmpty()) {
-			return false;
-		}
-		else{
-			Iterator<CellToken> it = this.getDependentCellsIterator();
-			
-			//iterate through the list to see if the CellToken exists
-			while(it.hasNext()) {
-				CellToken check = it.next();
-				if(check.isEqual(cellAddress)) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-	
-	/**
-	 * Adds the cell token to the list of dependency cells. Increases 
-	 * the in-degree of this cell by one.
-	 * 
-	 * @param cellAddress cell token of the dependency cell
-	 */
-	public void addDependency(CellToken cellAddress) {
-		//check to see if the cell address isn't already there
-		if(!dependenciesAddressExists(cellAddress)) {
-			dependencies.add(cellAddress);
-			inDegree++;
-			currentInDegree++;
-		}
-	}
-	
-	/**
-	 * Adds this cell token to the list of dependent cells of the input
-	 * address of the 2-d array.
-	 * 
-	 * @param sheet 2-d array containing the cell
-	 * @param cellAddress cell token of the dependent cell
-	 */
-	public void addDependentCell(Cell[][] sheet, CellToken cellAddress) {
-		//index into the cell to update
-		Cell toUpdate = sheet[cellAddress.getRow()][cellAddress.getCol()];
-		
-		//check to see if the cell address isn't already there
-		if(!toUpdate.dependentAddressExists(this.cellAddress)) {
-			toUpdate.dependentCells.add(this.cellAddress);
-		}
-	}
-	
-	/**
-	 * Removes all dependencies from the list of dependency cells. Updates the
-	 * dependent cell lists of the dependency cells.
-	 * 
-	 * @param sheet 2-d cell array which contains all cells to be updated
-	 */
-	public void removeAllDependencies(Cell[][] sheet) {
-		//iterate through the dependencies list and update the corresponding cells in the 2-d cell array
-		Iterator<CellToken> it = this.getDependenciesIterator();
-		
-		while(it.hasNext()) {
-			CellToken cellAddress = it.next();
-			Cell toUpdate = sheet[cellAddress.getRow()][cellAddress.getCol()];
-			
-			//iterate through dependent cells list and remove this cell reference
-			Iterator<CellToken> updateIt = toUpdate.getDependentCellsIterator();
-			
-			while(updateIt.hasNext()) {
-				CellToken cellAddress1 = updateIt.next();
-				
-				if(cellAddress1.isEqual(this.cellAddress)) {
-					updateIt.remove();
-					break;
-				}
-			}
-		}
-		
-		//clear the dependencies linked list
-		dependencies.clear();
-	}
-	
-	/**
-	 * Updates dependent cells by decreasing their respective current
-	 * in-degrees by one. Also decreases this cell's current in-degree
-	 * by one.
-	 * 
-	 * @param the 2-d cell array with the dependent cells
-	 */
-	public void updateDependents(Cell[][] sheet) {
-		//decrease the current in-degree
-		this.setCurrentInDegree(this.getCurrentInDegree() - 1);
-		
-		if(!this.dependentCells.isEmpty()) {
-			Iterator<CellToken> it = this.getDependentCellsIterator();
-			
-			//iterate through the list and decrease the current in-degrees of the cells
-			while(it.hasNext()) {
-				CellToken cellAddress = it.next();
-				Cell toDecrease = sheet[cellAddress.getRow()][cellAddress.getCol()];
-				
-				toDecrease.setCurrentInDegree(toDecrease.getCurrentInDegree() - 1);
-			}
-		}
-	}
-	
-	/**
-	 * Resets this cell by reducing the in-degree, current in-degree and value to 0. Also,
-	 * clears the dependency list and updates all associated cells to match the change.
-	 * 
-	 * @param sheet 2-d cell array containing all cells to be updated
-	 */
-	public void resetCell(Cell[][] sheet) {
-		//update in-degrees and value
-		this.setCurrentInDegree(0);
-		this.setInDegree(0);
-		this.setValue(0);
-		
-		//go through the dependency list and update those cells to reflect the change
-		if(!dependencies.isEmpty()) {
-			this.removeAllDependencies(sheet);
-		}
-	}
-	
-	/**
-	 * Returns a string representation of the cell object including all of the fields.
-	 * 
-	 * @return string representation of the cell
-	 */
-	public String toString() {
-		String toPrint = ("Row: " + this.getCellAddress().getRow() + "\nColumn: " + this.getCellAddress().getCol() 
-				+ "\nFormula: " + this.getFormula() + "\nValue: " + this.getValue() + "\nIn-degree, Current In-Degree: " +
-				this.getInDegree() + ", " + this.getCurrentInDegree() + "\n");
-		
-		//check to see if we need to print dependencies
-		if(!dependencies.isEmpty()) {
-			toPrint = toPrint.concat("Dependencies: ");
-			//iterate through the dependencies list and print all of the cells
-			Iterator<CellToken> it = this.getDependenciesIterator();
-			
-			while(it.hasNext()) {
-				CellToken address = it.next();
-				toPrint = toPrint.concat("(" + address.getRow() + ", " + address.getCol() + ") ");
-				toPrint = toPrint.concat("\n");
-			}
-		}
-		
-		//check to see if we need to print dependent cells
-		if(!dependentCells.isEmpty()) {
-			toPrint = toPrint.concat("Dependent Cells: ");
-			
-			//iterate through the dependencies list and print all of the cells
-			Iterator<CellToken> it = this.getDependentCellsIterator();
-			
-			while(it.hasNext()) {
-				CellToken address = it.next();
-				toPrint = toPrint.concat("(" + address.getRow() + ", " + address.getCol() + ") ");
-			}
-			toPrint = toPrint.concat("\n");
-		}
-		return toPrint;
-	}
+ private String formula;
+ private int value;
+ private static final int BadCell = -1;
+ // the expression tree below represents the formula
+// private ExpressionTree expressionTree;
+ //public void Evaluate (Spreadsheet spreadsheet){
+    
+    
+ //   };
+ 
+ 
+ 
+
+ 
+ public static int ExcelColumnNameToNumber(String columnName)
+{
+    if (columnName== null) {
+        throw new NullPointerException("String is empty");
+    };
+
+    columnName = columnName.toUpperCase();
+
+    int sum = 0;
+
+    for (int i = 0; i < columnName.length(); i++)
+    {
+        sum *= 26;
+        sum += (columnName.charAt(i) - 'A' + 1);
+    }
+
+    return sum;
+}
+
+
+ public static String getExcelColumnName(int number) {
+        final StringBuilder sb = new StringBuilder();
+
+        int num = number - 1;
+        while (num >=  0) {
+            int numChar = (num % 26)  + 65;
+            sb.append((char)numChar);
+            num = (num  / 26) - 1;
+        }
+        return sb.reverse().toString();
+    }
+    
+    
+    /**
+ * getCellToken
+ * 
+ * Assuming that the next chars in a String (at the given startIndex)
+ * is a cell reference, set cellToken's column and row to the
+ * cell's column and row.
+ * If the cell reference is invalid, the row and column of the return CellToken
+ * are both set to BadCell (which should be a final int that equals -1).
+ * Also, return the index of the position in the string after processing
+ * the cell reference.
+ * (Possible improvement: instead of returning a CellToken with row and
+ * column equal to BadCell, throw an exception that indicates a parsing error.)
+ * 
+ * A cell reference is defined to be a sequence of CAPITAL letters,
+ * followed by a sequence of digits (0-9).  The letters refer to
+ * columns as follows: A = 0, B = 1, C = 2, ..., Z = 25, AA = 26,
+ * AB = 27, ..., AZ = 51, BA = 52, ..., ZA = 676, ..., ZZ = 701,
+ * AAA = 702.  The digits represent the row number.
+ *
+ * @param inputString  the input string
+ * @param startIndex  the index of the first char to process
+ * @param cellToken  a cellToken (essentially a return value)
+ * @return  index corresponding to the position in the string just after the cell reference
+ */
+public static int getCellToken (String inputString, int startIndex, CellToken cellToken) {
+    char ch;
+    int column = 0;
+    int row = 0;
+    int index = startIndex;
+
+    // handle a bad startIndex
+    if ((startIndex < 0) || (startIndex >= inputString.length() )) {
+        cellToken.setColumn(inputString.charAt(index));
+        cellToken.setRow(BadCell);
+        return index;
+        
+    }
+
+    // get rid of leading whitespace characters
+    while (index < inputString.length() ) {
+        ch = inputString.charAt(index);            
+        if (!Character.isWhitespace(ch)) {
+            break;
+        }
+        index++;
+    }
+    if (index == inputString.length()) {
+        // reached the end of the string before finding a capital letter
+        cellToken.setColumn(BadCell);
+        cellToken.setRow(BadCell);
+        return index;
+    }
+
+    // ASSERT: index now points to the first non-whitespace character
+
+    ch = inputString.charAt(index);            
+    // process CAPITAL alphabetic characters to calculate the column
+    if (!Character.isUpperCase(ch)) {
+        cellToken.setColumn(BadCell);
+        cellToken.setRow(BadCell);
+        return index;
+    } else {
+        column = ch - 'A';
+        index++;
+    }
+
+    while (index < inputString.length() ) {
+        ch = inputString.charAt(index);            
+        if (Character.isUpperCase(ch)) {
+            column = ((column + 1) * 26) + (ch - 'A');
+            index++;
+        } else {
+            break;
+        }
+    }
+    if (index == inputString.length() ) {
+        // reached the end of the string before fully parsing the cell reference
+        cellToken.setColumn(BadCell);
+        cellToken.setRow(BadCell);
+        return index;
+    }
+
+    // ASSERT: We have processed leading whitespace and the
+    // capital letters of the cell reference
+
+    // read numeric characters to calculate the row
+    if (Character.isDigit(ch)) {
+        row = ch - '0';
+        index++;
+    } else {
+        cellToken.setColumn(BadCell);
+        cellToken.setRow(BadCell);
+        return index;
+    }
+
+    while (index < inputString.length() ) {
+        ch = inputString.charAt(index);            
+        if (Character.isDigit(ch)) {
+            row = (row * 10) + (ch - '0');
+            index++;
+        } else {
+            break;
+        }
+    }
+
+    // successfully parsed a cell reference
+    cellToken.setColumn(column);
+    cellToken.setRow(row);
+    return index;
+}
+
+public static void main(String [] args)
+    {
+        CellToken token = new CellToken();
+       System.out.println(getCellToken("AA27 + 6", 0, token));
+       
+       System.out.println(token.getRow());
+          System.out.println(token.getCol());
+          Cell newClass = new Cell();
+          
+          Stack p = newClass.getFormula("A6 * (B1 + C88) / 2");
+          while(!(p.isEmpty())){
+           if(p.peek() instanceof LiteralToken){
+             System.out.println(p.pop());
+            }else if (p.peek() instanceof OperatorToken){
+            System.out.println(((OperatorToken)(p.pop())).getOperatorToken());
+            }else{
+            
+            p.pop();
+        }
+            
+          
+          
+           }
+       }
+
+       
+    /**
+ * getFormula
+ * 
+ * Given a string that represents a formula that is an infix
+ * expression, return a stack of Tokens so that the expression,
+ * when read from the bottom of the stack to the top of the stack,
+ * is a postfix expression.
+ * 
+ * A formula is defined as a sequence of tokens that represents
+ * a legal infix expression.
+ * 
+ * A token can consist of a numeric literal, a cell reference, or an
+ * operator (+, -, *, /).
+ * 
+ * Multiplication (*) and division (/) have higher precedence than
+ * addition (+) and subtraction (-).  Among operations within the same
+ * level of precedence, grouping is from left to right.
+ * 
+ * This algorithm follows the algorithm described in Weiss, pages 105-108.
+ */
+Stack getFormula(String formula) {
+    Stack returnStack = new Stack();  // stack of Tokens (representing a postfix expression)
+    boolean error = false;
+    char ch = ' ';
+
+    int literalValue = 0;
+
+    CellToken cellToken;
+    int column = 0;
+    int row = 0;
+
+    int index = 0;  // index into formula
+    Stack operatorStack = new Stack();  // stack of operators
+
+    while (index < formula.length() ) {
+        // get rid of leading whitespace characters
+        while (index < formula.length() ) {
+            ch = formula.charAt(index);
+            if (!Character.isWhitespace(ch)) {
+                break;
+            }
+            index++;
+        }
+
+        if (index == formula.length() ) {
+            error = true;
+            break;
+        }
+
+        // ASSERT: ch now contains the first character of the next token.
+        if (isOperator(ch)) {
+            // We found an operator token
+            switch (ch) {
+                case OperatorToken.Plus:
+                case OperatorToken.Minus:
+                case OperatorToken.Mult:
+                case OperatorToken.Div:
+                case OperatorToken.LeftParen:
+                    // push operatorTokens onto the output stack until
+                    // we reach an operator on the operator stack that has
+                    // lower priority than the current one.
+                    OperatorToken stackOperator;
+                    while (!operatorStack.isEmpty()) {
+                        stackOperator = (OperatorToken) operatorStack.peek();
+                        if ( (stackOperator.priority() >= operatorPriority(ch)) &&
+                            (stackOperator.getOperatorToken() != OperatorToken.LeftParen) ) {
+
+                            // output the operator to the return stack    
+                            operatorStack.pop();
+                            returnStack.push(stackOperator);
+                        } else {
+                            break;
+                        }
+                    }
+                    break;
+
+                default:
+                    // This case should NEVER happen
+                    System.out.println("Error in getFormula.");
+                    System.exit(0);
+                    break;
+            }
+            // push the operator on the operator stack
+            operatorStack.push(new OperatorToken(ch));
+
+            index++;
+
+        } else if (ch == ')') {    // maybe define OperatorToken.RightParen ?
+            OperatorToken stackOperator;
+            stackOperator = (OperatorToken) operatorStack.pop();
+            // This code does not handle operatorStack underflow.
+            while (stackOperator.getOperatorToken() != OperatorToken.LeftParen) {
+                // pop operators off the stack until a LeftParen appears and
+                // place the operators on the output stack
+                returnStack.push(stackOperator);
+                stackOperator = (OperatorToken) operatorStack.pop();
+            }
+
+            index++;
+        } else if (Character.isDigit(ch)) {
+            // We found a literal token
+            literalValue = ch - '0';
+            index++;
+            while (index < formula.length()) {
+                ch = formula.charAt(index);
+                if (Character.isDigit(ch)) {
+                    literalValue = (literalValue * 10) + (ch - '0');
+                    index++;
+                } else {
+                    break;
+                }
+            }
+            // place the literal on the output stack
+            returnStack.push(new LiteralToken(literalValue));
+
+        } else if (Character.isUpperCase(ch)) {
+            // We found a cell reference token
+             cellToken = new CellToken();
+            index = getCellToken(formula, index, cellToken);
+            if (cellToken.getRow() == BadCell) {
+                error = true;
+                break;
+            } else {
+                // place the cell reference on the output stack
+                returnStack.push(cellToken);
+            }
+
+        } else {
+            error = true;
+            break;
+        }
+    }
+
+    // pop all remaining operators off the operator stack
+    while (!operatorStack.isEmpty()) {
+        returnStack.push(operatorStack.pop());
+    }
+
+    if (error) {
+        // a parse error; return the empty stack
+        while(!returnStack.isEmpty()){
+            returnStack.pop();
+        }
+    }
+
+    return returnStack;
+}
+
+
+/**
+ * Return true if the char ch is an operator of a formula.
+ * Current operators are: +, -, *, /, (.
+ * @param ch  a char
+ * @return  whether ch is an operator
+ */
+public boolean isOperator (char ch) {
+    return ((ch == '+') ||
+            (ch == '-') ||
+            (ch == '*') ||
+            (ch == '/') ||
+            (ch == '(') );
+}
+
+
+
+/**
+ * Given an operator, return its priority.
+ *
+ * priorities:
+ *   +, - : 0
+ *   *, / : 1
+ *   (    : 2
+ *
+ * @param ch  a char
+ * @return  the priority of the operator
+ */
+public int operatorPriority (char ch) {
+    if (!isOperator(ch)) {
+        // This case should NEVER happen
+        System.out.println("Error in operatorPriority.");
+        System.exit(0);
+    }
+    switch (ch) {
+        case '+':
+            return 0;
+        case '-':
+            return 0;
+        case '*':
+            return 1;
+        case '/':
+            return 1;
+        case '(':
+            return 2;
+
+        default:
+            // This case should NEVER happen
+            System.out.println("Error in operatorPriority.");
+            System.exit(0);
+            break;
+    }
+    return -1;
+}
+
+
+
+/**
+ *  Given a CellToken, print it out as it appears on the
+ *  spreadsheet (e.g., "A3")
+ *  @param cellToken  a CellToken
+ *  @return  the cellToken's coordinates
+ */
+public String printCellToken (CellToken cellToken) {
+    char ch;
+    String returnString = "";
+    int col;
+    int largest = 26;  // minimum col number with number_of_digits digits
+    int number_of_digits = 2;
+
+    col = cellToken.getCol();
+
+    // compute the biggest power of 26 that is less than or equal to col
+    // We don't check for overflow of largest here.
+    while (largest <= col) {
+        largest = largest * 26;
+        number_of_digits++;
+    }
+    largest = largest / 26;
+    number_of_digits--;
+
+    // append the column label, one character at a time
+    while (number_of_digits > 1) {
+        ch = (char) (((col / largest) - 1) + 'A');
+        returnString += ch;
+        col = col % largest;
+        largest = largest  / 26;
+        number_of_digits--;
+    }
+
+    // handle last digit
+    ch = (char)(col + 'A');
+    returnString += ch;
+
+    // append the row as an integer
+    returnString += cellToken.getRow();
+
+    return returnString;
+}
+
+
 }
