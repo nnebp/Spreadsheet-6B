@@ -1,3 +1,4 @@
+
 import java.util.Stack;
 
 /**
@@ -162,31 +163,31 @@ public static int getCellToken (String inputString, int startIndex, CellToken ce
  * Some tests for the evaluator class TODO remove probably
  * @param args
  */
-public static void main(String [] args)
-    {
-		Evaluator test = new Evaluator("3 - 5", null);
-//        CellToken token = new CellToken();
-//       System.out.println(getCellToken("AA27 + 6", 0, token));
-//       
-//       System.out.println(token.getRow());
-//          System.out.println(token.getCol());
-//          Cell newClass = new Cell();
-//          
-//          Stack p = newClass.getFormula("A6 * (B1 + C88) / 2");
-//          while(!(p.isEmpty())){
-//           if(p.peek() instanceof LiteralToken){
-//             System.out.println(p.pop());
-//            }else if (p.peek() instanceof OperatorToken){
-//            System.out.println(((OperatorToken)(p.pop())).getOperatorToken());
-//            }else{
-//            
-//            p.pop();
-//        }
-//            
-//          
-//          
-//           }
-       }
+//public static void main(String [] args)
+//    {
+//		Evaluator test = new Evaluator("3 - 5", null);
+////        CellToken token = new CellToken();
+////       System.out.println(getCellToken("AA27 + 6", 0, token));
+////       
+////       System.out.println(token.getRow());
+////          System.out.println(token.getCol());
+////          Cell newClass = new Cell();
+////          
+////          Stack p = newClass.getFormula("A6 * (B1 + C88) / 2");
+////          while(!(p.isEmpty())){
+////           if(p.peek() instanceof LiteralToken){
+////             System.out.println(p.pop());
+////            }else if (p.peek() instanceof OperatorToken){
+////            System.out.println(((OperatorToken)(p.pop())).getOperatorToken());
+////            }else{
+////            
+////            p.pop();
+////        }
+////            
+////          
+////          
+////           }
+//       }
 
        
 /**
@@ -209,7 +210,7 @@ public static void main(String [] args)
 * 
 * This algorithm follows the algorithm described in Weiss, pages 105-108.
 */
-Stack getFormula(String formula) {
+public Stack getFormula(String formula) {
 Stack returnStack = new Stack();  // stack of Tokens (representing a postfix expression)
 boolean error = false;
 char ch = ' ';

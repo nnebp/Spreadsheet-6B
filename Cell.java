@@ -80,6 +80,10 @@ public class Cell {
 		return currentInDegree;
 	}
 	
+	public Evaluator getEvaluator() {
+		return evaluator;
+	}
+	
 	/**
 	 * Return the cell address of this cell.
 	 * 
@@ -96,7 +100,6 @@ public class Cell {
 	 */
 	public void setFormula(String formula) {
 		this.formula = formula;
-		
 	}
 	
 	/**
