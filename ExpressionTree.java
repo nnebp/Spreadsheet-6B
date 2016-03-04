@@ -2,10 +2,16 @@ import java.util.Stack;
 
 public class ExpressionTree {
 	
-	private ExpressionTreeNode root;
-	//public void makeEmpty(); 
-	//public void printTree(); 
+	/** reference to the table */
+	private Cell cells[][];
 	
+	/** The root of the tree. */
+	private ExpressionTreeNode root;
+	
+	/**
+	 * Class representing a Expression tree node
+	 * @author chinn
+	 */
 	private class ExpressionTreeNode { 
 		private Token token;
 		ExpressionTreeNode left; 
@@ -20,6 +26,10 @@ public class ExpressionTree {
 		}
 	}
 	
+	/**
+	 * Returns the root node of the ExpressionTree.
+	 * @return
+	 */
 	public ExpressionTreeNode getRoot() {
 		return root;
 	}
@@ -27,9 +37,11 @@ public class ExpressionTree {
 	/**
 	 * Constructor for the Expression tree
 	 * @param postFix the stack from which to build the tree
+	 * @param theCells reference to Cells (which we may get values from)
 	 */
-	ExpressionTree(Stack postFix) {
+	ExpressionTree(Stack postFix, Cell[][] theCells) {
 		this.BuildExpressionTree(postFix);
+		this.cells = theCells;
 	}
 	
 	// Build an expression tree from a stack of ExpressionTreeTokens 
@@ -41,48 +53,62 @@ public class ExpressionTree {
 		}
 		
 	}
-	
-	//TODO this is a test method we delete it
-	void printPostOrder(ExpressionTreeNode root) {
+
+	/**
+	 * Prints the values in a tree in postodrder recursively 
+	 * @param root the root of the tree
+	 */
+	private void postOrder(ExpressionTreeNode root) {
 		if (root != null) {
-			printPostOrder(root.left);
-			printPostOrder(root.right);
+			postOrder(root.left);
+			postOrder(root.right);
 			
 			System.out.print(root.token + ", ");
 		}
 	}
 	
-	int evaluateTest(ExpressionTreeNode root) {
+	
+	public int evaluate() {
+		return this.recursiveEvaluate(root);
+	}
+	
+	private int recursiveEvaluate(ExpressionTreeNode root) {
 		if (root != null) {
 			
-			// if its an operator
+			// if node is operator
 			if (root.token instanceof OperatorToken) {
 				switch (((OperatorToken) root.token).getOperatorToken()) {
 					case '+':
-						return evaluateTest(root.left) + evaluateTest(root.right);
+						return recursiveEvaluate(root.left) + recursiveEvaluate(root.right);
 					case '*':
-						return evaluateTest(root.left) * evaluateTest(root.right);
-					case '-':
-						return evaluateTest(root.left) - evaluateTest(root.right);
+						return recursiveEvaluate(root.left) * recursiveEvaluate(root.right);
 					case '/':
-						return evaluateTest(root.left) / evaluateTest(root.right);
+						return recursiveEvaluate(root.left) / recursiveEvaluate(root.right);
+					case '-':
+						return recursiveEvaluate(root.left) - recursiveEvaluate(root.right);
 				}
 			}
 			
-			// not an operator but is a literal
-			//TODO allow cell values
-			if (root.token instanceof LiteralToken) {
-				
+			// node is a literal
+			else if (root.token instanceof LiteralToken) {
 				return ( (LiteralToken) root.token).getLiteral();
 			}
 			
-//			evaluateTest(root.left);
-//			evaluateTest(root.right);
-//			System.out.print(root.token + ", ");
+			//node is a cell
+			else if (root.token instanceof CellToken) {
+				//get the location of the cell and evaluate its value
+				CellToken cellToken = ( (CellToken) root.token);
+				int row = cellToken.getRow();
+				int column = cellToken.getCol();
+				
+				return (this.cells[row][column].getValue());
+			}
+			
 		}
 		//java made me TODO deal with this we got a null node
 		return 0;
 	}
+	
 	
 	ExpressionTreeNode GetExpressionTree(Stack s) {
 		ExpressionTreeNode returnTree; 
