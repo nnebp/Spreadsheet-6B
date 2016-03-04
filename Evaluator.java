@@ -242,7 +242,6 @@ while (index < formula.length() ) {
     if ( ch=='-' && Character.isDigit(formula.charAt(index + 1)) ) {
     	ch = formula.charAt(index + 1);
     	
-    	System.out.println("-" + formula.charAt(index+1) + " is a negative number!!");
     	// We found a negative literal token
         literalValue = ch - '0';
         index++;
@@ -257,7 +256,6 @@ while (index < formula.length() ) {
             }
         }
         // place the literal on the output stack
-        System.out.println(literalValue*(-1));
         returnStack.push(new LiteralToken((-1)*literalValue));
     	
     }
