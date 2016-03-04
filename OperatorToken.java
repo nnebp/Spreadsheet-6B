@@ -39,4 +39,10 @@ public char getOperatorToken(){
 
     return operatorToken;
 }
+
+public String toString() {
+	return operatorToken + "";
+	
+}
+
 }
