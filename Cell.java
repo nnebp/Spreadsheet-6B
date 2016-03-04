@@ -17,8 +17,10 @@ import java.util.LinkedList;
 public class Cell {
 	private String formula;
 	private CellToken cellAddress;
+	private Cell[][] cells;
 	private int value, inDegree, currentInDegree;
 	private LinkedList<CellToken> dependencies, dependentCells;
+	private Evaluator evaluator;
 	
 	/**
 	 * Default constructor.
@@ -34,8 +36,13 @@ public class Cell {
 		currentInDegree = 0;
 		dependencies = new LinkedList<CellToken>();
 		dependentCells = new LinkedList<CellToken>();
+		evaluator = new Evaluator(formula, null);
 	}
 	
+	public void addReference(Cell[][] theCells) {
+		this.cells = theCells;
+	}
+
 	/**
 	 * Returns the formula of this cell.
 	 * 
@@ -89,8 +96,19 @@ public class Cell {
 	 */
 	public void setFormula(String formula) {
 		this.formula = formula;
+		
 	}
 	
+	/**
+	 * Sets the cells value based on its formula
+	 */
+	public void calculateValue() {
+		evaluator.setFormula(formula);
+		evaluator.setReference(cells);
+		
+		setValue(evaluator.calculate(formula));
+	}
+
 	/**
 	 * Sets the value of this cell to the input.
 	 * 
