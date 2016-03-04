@@ -21,6 +21,32 @@ public class CellToken extends Token {
 	 }
 	 
 	 /**
+	  * Parameterless constructor.
+	  */
+	 public CellToken() {
+		 this.row = 0;
+		 this.column = 0;
+	 }
+	 
+	 /**
+	  * Sets the column value for the cell token.
+	  * 
+	  * @param newColumn new column value
+	  */
+	 public void setColumn(int newColumn) {
+		 this.column = newColumn;
+	 }
+
+	 /**
+	  * Sets the row value for the cell token.
+	  * 
+	  * @param newRow new row value
+	  */
+     public void setRow(int newRow) {
+		this.row = newRow;
+	 }
+
+	 /**
 	  * Returns true of this cell token is equal to the input
 	  * cell token.
 	  * 
@@ -52,5 +78,14 @@ public class CellToken extends Token {
 	  */
 	 public int getCol() {
 		 return column;
+	 }
+	 
+	 /**
+	  * Returns a String representation of the cell token.
+	  * 
+	  * @return cell token string.
+	  */
+	 public String toString() {
+		 return '['+ row + ',' + column + "]";
 	 }
 }
