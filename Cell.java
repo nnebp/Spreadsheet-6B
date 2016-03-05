@@ -39,6 +39,11 @@ public class Cell {
 		evaluator = new Evaluator(formula, null);
 	}
 	
+	/**
+	 * Adds a reference to the 2-d array of cells.
+	 * 
+	 * @param theCells 2-d array of cell objects containing every cell
+	 */
 	public void addReference(Cell[][] theCells) {
 		this.cells = theCells;
 	}
@@ -80,6 +85,11 @@ public class Cell {
 		return currentInDegree;
 	}
 	
+	/**
+	 * Returns the evaluator for this cell.
+	 * 
+	 * @return the evaluator for this cell
+	 */
 	public Evaluator getEvaluator() {
 		return evaluator;
 	}
