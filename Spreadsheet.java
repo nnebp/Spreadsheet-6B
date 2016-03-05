@@ -69,6 +69,7 @@ public class Spreadsheet {
 	 */
 	public void updateCell(int row, int col) {
 		Cell toUpdate = sheet[row][col];
+		toUpdate.resetCell(sheet);
 		Stack toCheck = toUpdate.getEvaluator().getFormula(toUpdate.getFormula());
 		
 		//go through the stack and parse the cell tokens
