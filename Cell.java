@@ -286,7 +286,8 @@ public class Cell {
 	/**
 	 * Updates dependent cells by decreasing their respective current
 	 * in-degrees by one. Also decreases this cell's current in-degree
-	 * by one.
+	 * by one. Used during the topological sort in Spreadsheet.java in 
+	 * the toCyclic() method.
 	 * 
 	 * @param the 2-d cell array with the dependent cells
 	 */
