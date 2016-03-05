@@ -127,9 +127,8 @@ public class Spreadsheet {
 			while(q.peek() != null) {
 				Cell toEval = q.remove();
 				toEval.updateDependents(sheet);
-				System.out.println("Cell: " + toEval.getCellAddress().getRow() +
-						", " + toEval.getCellAddress().getCol() + " is being evaluated.");
-				System.out.println("Cell's value is " + toEval.getValue() + "\n");
+				
+				toEval.calculateValue();
 			}
 		}
 		
