@@ -5,7 +5,6 @@
  *
  */
 
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -59,18 +58,15 @@ public class Spreadsheet {
 	public Cell getCellAt(int row, int col) {
 		return sheet[row][col];
 	}
-	
+
 	/**
-	 * TEMPORARY TEST FUNCTION. 
+	 * Updates the cell by going through the stack of tokens created by 
+	 * the evaluator and adjusting the dependencies linked list. Also updates
+	 * the corresponding dependent cell linked lists of the dependencies.
+	 * 
+	 * @param row row of the cell in the 2-d array
+	 * @param col column of the cell in the 2-d array
 	 */
-	public boolean updateCell(int row, int col, int value) {
-		Cell toUpdate = sheet[row][col];
-		toUpdate.resetCell(sheet);
-		toUpdate.setValue(value);
-		
-		return this.isCyclic();
-	}
-	
 	public void updateCell(int row, int col) {
 		Cell toUpdate = sheet[row][col];
 		Stack toCheck = toUpdate.getEvaluator().getFormula(toUpdate.getFormula());
@@ -123,11 +119,10 @@ public class Spreadsheet {
 				return true;
 			}
 			
-			//iterate through the queue and update
-			while(q.peek() != null) {
+			//iterate through the queue, update, and calculate values
+			while(!q.isEmpty()) {
 				Cell toEval = q.remove();
 				toEval.updateDependents(sheet);
-				
 				toEval.calculateValue();
 			}
 		}
@@ -138,7 +133,6 @@ public class Spreadsheet {
 				sheet[i][j].setCurrentInDegree(sheet[i][j].getInDegree());
 			}
 		}
-		
 		return false;
 	}
 	
@@ -159,24 +153,4 @@ public class Spreadsheet {
 	public final int getMaxCol() {
 		return MAX_COLS;
 	}
-	
-	//TEST
-	public static void main(String[] args) {
-		Spreadsheet sheet = new Spreadsheet();
-		
-		//update cell and print
-		sheet.updateCell(1, 3, 4);		
-		System.out.println(sheet.sheet[1][3]);
-		
-		//manually add dependency
-		sheet.sheet[1][3].addDependency(sheet.sheet[0][1].getCellAddress());
-		System.out.println(sheet.sheet[1][3]);
-		sheet.sheet[1][3].addDependentCell(sheet.sheet, sheet.sheet[0][1].getCellAddress());
-		System.out.println(sheet.sheet[0][1]);
-		
-		//do an update and see if cell (1, 3) updates last
-		sheet.updateCell(0, 0, 0);
-	}
-	
-	
 }
