@@ -1,4 +1,14 @@
-package GUI;
+/**
+ * Source: 
+ * Camick, Bob. (2008). Row Number Table << Java Tips Weblog.
+ * (Version Unknown) [Java Class]. Available at
+ * https://tips4java.wordpress.com/2008/11/18/row-number-table/
+ * (Accessed 3/4/2016)
+ * 
+ * We used this class only to add the row header column to the left 
+ * side of the JTable.
+ */
+ 
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.*;
