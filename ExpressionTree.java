@@ -67,11 +67,18 @@ public class ExpressionTree {
 		}
 	}
 	
-	
+	/**
+	 * Evaluates the value of the expression tree by recursing 
+	 * through (via the recursiveEvaluate method);
+	 * 
+	 * @return the value of the expression tree after a
+	 * post order traversal
+	 */
 	public int evaluate() {
 		return this.recursiveEvaluate(root);
 	}
 	
+	//SOMETHING NEEDS TO BE DONE HERE AT THE END
 	private int recursiveEvaluate(ExpressionTreeNode root) {
 		if (root != null) {
 			
@@ -135,6 +142,4 @@ public class ExpressionTree {
 		//java made me do it
 		return null;
 	}
-	
-
 }
