@@ -42,7 +42,7 @@ public class CellToken extends Token {
 	  * 
 	  * @param newRow new row value
 	  */
-     public void setRow(int newRow) {
+	  public void setRow(int newRow) {
 		this.row = newRow;
 	 }
 
