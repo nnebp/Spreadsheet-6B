@@ -331,7 +331,7 @@ public class Cell {
 	 * 
 	 * @return string representation of the cell
 	 */
-	public String toString() {
+	public String debugString() {
 		String toPrint = ("Row: " + this.getCellAddress().getRow() + "\nColumn: " + this.getCellAddress().getCol() 
 				+ "\nFormula: " + this.getFormula() + "\nValue: " + this.getValue() + "\nIn-degree, Current In-Degree: " +
 				this.getInDegree() + ", " + this.getCurrentInDegree() + "\n");
@@ -364,4 +364,13 @@ public class Cell {
 		}
 		return toPrint;
 	}
+	
+	/**
+	 * Returns a string representation of the value of the cell.
+	 * 
+	 * @return string containing value of the cell
+	 */
+	 public String toString() {
+	 	return Integer.toString(this.getValue());
+	 }
 }
