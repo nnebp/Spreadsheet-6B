@@ -43,12 +43,6 @@ public class CellTable extends JPanel{
         //Create the scroll pane and add the table to it.
         JScrollPane scrollPane = new JScrollPane(table);
 
-        //Display row numbers
-        JTable rowTable = new RowNumberTable(table);
-        scrollPane.setRowHeaderView(rowTable);
-        scrollPane.setCorner(JScrollPane.UPPER_LEFT_CORNER,
-            rowTable.getTableHeader());
-        
         //we need to have our special cell editor 
         table.setDefaultEditor(Cell.class,
                                new CellEditor(this.mySpreadSheet, this.myFrame));
