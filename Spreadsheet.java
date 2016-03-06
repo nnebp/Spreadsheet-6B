@@ -131,22 +131,4 @@ public class Spreadsheet {
 		}
 		return false;
 	}
-	
-	/**
-	 * Returns the maximum number of rows of the spreadsheet.
-	 * 
-	 * @return maximum number of rows
-	 */
-	public final int getMaxRow() {
-		return MAX_ROWS;
-	}
-	
-	/**
-	 * Returns the maximum number of columns of the spreadsheet.
-	 * 
-	 * @return maximum number of columns
-	 */
-	public final int getMaxCol() {
-		return MAX_COLS;
-	}
 }
