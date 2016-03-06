@@ -93,14 +93,14 @@ public class Spreadsheet {
 	public boolean isCyclic() {
 		//top sort algorithm
 		int counter = 0, currentCounter = 0;
-		int max = MAX_ROWS * MAX_COLS;
+		int max = sheet.length * sheet[0].length;
 		Queue<Cell> q = new LinkedList<Cell>();
 		
 		while(counter != max) {
 			//counters to check for cycles
 			currentCounter = counter;
-			for(int i = 0; i < MAX_ROWS; i++) {
-				for(int j = 0; j < MAX_COLS; j++) {
+			for(int i = 0; i < sheet.length; i++) {
+				for(int j = 0; j < sheet[0].length; j++) {
 					//if in-degree 0 is found, add to the queue
 					if(sheet[i][j].getCurrentInDegree() == 0) {
 						counter++;
@@ -112,8 +112,8 @@ public class Spreadsheet {
 			//check to see if nothing has been updated
 			if(currentCounter == counter) {
 				//restore the current in-degrees of the cells
-				for(int i = 0; i < MAX_ROWS; i++) {
-					for(int j = 0; j < MAX_COLS; j++) {
+				for(int i = 0; i < sheet.length; i++) {
+					for(int j = 0; j < sheet[0].length; j++) {
 						sheet[i][j].setCurrentInDegree(sheet[i][j].getInDegree());
 					}
 				}
@@ -129,8 +129,8 @@ public class Spreadsheet {
 		}
 		
 		//restore the current in-degrees of the cells
-		for(int i = 0; i < MAX_ROWS; i++) {
-			for(int j = 0; j < MAX_COLS; j++) {
+		for(int i = 0; i < sheet.length; i++) {
+			for(int j = 0; j < sheet[0].length; j++) {
 				sheet[i][j].setCurrentInDegree(sheet[i][j].getInDegree());
 			}
 		}
