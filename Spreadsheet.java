@@ -10,32 +10,27 @@ import java.util.Queue;
 import java.util.Stack;
 
 public class Spreadsheet {
-	private static final int MAX_ROWS = 4;
-	private static final int MAX_COLS = 4;
-	
 	private Cell[][] sheet;
+	private final int MAX_ROWS;
+	private final int MAX_COLS;
 	
 	/**
-	 * Default constructor. Sets the addresses of the cells.
+	 * Default constructor. Generates a 2-d array of Cell objects 
+	 * with the requested number of rows and columns. Also initializes 
+	 * all of the objects and sets their respective addresses.
 	 */
-	public Spreadsheet() {
-		sheet = new Cell[MAX_ROWS][MAX_COLS];
+	public Spreadsheet(int rows, int cols) {
+		MAX_ROWS = rows;
+		MAX_COLS = cols;
+		sheet = new Cell[rows][cols];
 		
 		//set the cell token addresses
 		for(int i = 0; i < MAX_ROWS; i++) {
 			for (int j = 0; j < MAX_COLS; j++) {
 				sheet[i][j] = new Cell(i, j);
+				sheet[i][j].addReference(sheet);
 			}
 		}
-	}
-	
-	/**
-	 * Parameterized constructor.
-	 * 
-	 * @param sheet 2-d array of cells
-	 */
-	public Spreadsheet(Cell[][] cells) {
-		sheet = cells;
 	}
 	
 	/**
@@ -93,14 +88,14 @@ public class Spreadsheet {
 	public boolean isCyclic() {
 		//top sort algorithm
 		int counter = 0, currentCounter = 0;
-		int max = sheet.length * sheet[0].length;
+		int max = MAX_ROWS * MAX_COLS;
 		Queue<Cell> q = new LinkedList<Cell>();
 		
 		while(counter != max) {
 			//counters to check for cycles
 			currentCounter = counter;
-			for(int i = 0; i < sheet.length; i++) {
-				for(int j = 0; j < sheet[0].length; j++) {
+			for(int i = 0; i < MAX_ROWS; i++) {
+				for(int j = 0; j < MAX_COLS; j++) {
 					//if in-degree 0 is found, add to the queue
 					if(sheet[i][j].getCurrentInDegree() == 0) {
 						counter++;
@@ -112,8 +107,8 @@ public class Spreadsheet {
 			//check to see if nothing has been updated
 			if(currentCounter == counter) {
 				//restore the current in-degrees of the cells
-				for(int i = 0; i < sheet.length; i++) {
-					for(int j = 0; j < sheet[0].length; j++) {
+				for(int i = 0; i < MAX_ROWS; i++) {
+					for(int j = 0; j < MAX_COLS; j++) {
 						sheet[i][j].setCurrentInDegree(sheet[i][j].getInDegree());
 					}
 				}
@@ -129,8 +124,8 @@ public class Spreadsheet {
 		}
 		
 		//restore the current in-degrees of the cells
-		for(int i = 0; i < sheet.length; i++) {
-			for(int j = 0; j < sheet[0].length; j++) {
+		for(int i = 0; i < MAX_ROWS; i++) {
+			for(int j = 0; j < MAX_COLS; j++) {
 				sheet[i][j].setCurrentInDegree(sheet[i][j].getInDegree());
 			}
 		}
