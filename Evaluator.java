@@ -52,7 +52,13 @@ public class Evaluator {
 		 myCells = theCells;
 	 }
 	 
-	 //for now just turns a stack into a tree
+	 /**
+	  * Uses a helper method getFormula to turn string formula
+	  * into Stack of tokens. Then, it initializes the tree with that stack
+	  * Calculate the value for converted cells.
+	  *@param String formula
+	  *@return Integer value of cells
+	  */
 	 public final int calculate(String formula) {
 		 Stack tempStack = getFormula(formula);
 		 ExpressionTree tree = new ExpressionTree(tempStack, myCells);
