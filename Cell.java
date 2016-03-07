@@ -371,6 +371,9 @@ public class Cell {
 	 * @return string containing value of the cell
 	 */
 	 public String toString() {
+		if (this.formula.equals(""))
+			return "";
+		
 	 	return Integer.toString(this.getValue());
 	 }
 }
