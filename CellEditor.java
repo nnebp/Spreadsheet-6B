@@ -1,3 +1,11 @@
+/**
+ * Cell editor for objects of type Cell. Allows the users to edit the
+ * formula while the JTable displays a cells value. Based on examples from:
+ * https://docs.oracle.com/javase/tutorial/uiswing/components/table.html
+ * 
+ * @author nnebp
+ */
+
 import java.awt.Component;
 import java.text.ParseException;
 
@@ -25,6 +33,11 @@ public class CellEditor extends DefaultCellEditor{
 	
 	private JFrame frame;
 	
+	/** 
+	 * CellEditor constructor. 
+	 * @param aSpreadSheet reference to spreadsheet object.
+	 * @param aFrame reference to frame containing the jtable.
+	 */
 	public CellEditor(Spreadsheet aSpreadSheet, JFrame aFrame) {
 		super(new JFormattedTextField());
 
@@ -39,7 +52,10 @@ public class CellEditor extends DefaultCellEditor{
         cellRef = null;
 	}
 
-	// return the forumla for editing
+	/**
+	 * Returns the component for editing and displays formula text for 
+	 * editing.
+	 */
     public Component getTableCellEditorComponent(JTable table,
             Object value, boolean isSelected,
             int row, int column) {
@@ -54,7 +70,10 @@ public class CellEditor extends DefaultCellEditor{
         return myComponent;
     }
     
-    //THIS IS WHAT IS SET IN THE CELL
+    /**
+     * Returns the Cell editor value.
+     * @returns the edited Cell.
+     */
     public Object getCellEditorValue() {
 		myComponent = (JFormattedTextField)getComponent();
 		//remember the old formula for the case of a cycle
@@ -64,36 +83,32 @@ public class CellEditor extends DefaultCellEditor{
     	
     	this.spreadSheet.updateCell(cellRef.getCellAddress().getRow(),
 									cellRef.getCellAddress().getCol());
+    	//check for cycles. isCyclic will perform the top sort if no
+    	//cycles are present in the spreadsheet.
     	if (spreadSheet.isCyclic()) {
-    		System.out.println("THERE IS A CYCLE!!!");
     		
     		JOptionPane.showMessageDialog(frame,
     			    "There is a cycle in new formula!",
     			    "Error",
     			    JOptionPane.ERROR_MESSAGE);
     		
+    		//reset the cell to its old value and run isCyclic again to
+    		//calculate the values of all the cells in the spreadsheet.
     		cellRef.resetCell(spreadSheet.getSheet());
     		cellRef.setFormula(oldFormula);
-    		System.out.println(cellRef.debugString());
     		spreadSheet.isCyclic();
     		
     	}
     	
-    	//update cell
-    	//iscyclic
-    	//TODO delete this after the top sort works
-    	//cellRef.calculateValue();
 		return cellRef;
     }
     
     
     public boolean stopCellEditing() {
-		//myComponent = (JFormattedTextField)getComponent();
 		
     	try {
 			myComponent.commitEdit();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	
