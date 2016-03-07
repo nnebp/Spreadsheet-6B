@@ -2,7 +2,6 @@
  * Class that has an underlying 2-d array of Cell objects.
  * 
  * @author Sandeep Heera
- *
  */
 
 import java.util.LinkedList;
@@ -17,7 +16,8 @@ public class Spreadsheet {
 	/**
 	 * Default constructor. Generates a 2-d array of Cell objects 
 	 * with the requested number of rows and columns. Also initializes 
-	 * all of the objects and sets their respective addresses.
+	 * all of the objects and sets their respective addresses. MAX_ROWS and
+	 * MAX_COLS are also set.
 	 */
 	public Spreadsheet(int rows, int cols) {
 		MAX_ROWS = rows;
@@ -104,6 +104,7 @@ public class Spreadsheet {
 					}
 				}
 			}
+			
 			//check to see if nothing has been updated
 			if(currentCounter == counter) {
 				//restore the current in-degrees of the cells
