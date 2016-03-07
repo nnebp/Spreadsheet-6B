@@ -21,11 +21,11 @@ public class LiteralToken extends Token {
 	 *
 	 * @return value of this Literal token
 	 */
-	    public int getLiteral() {
-	        return myLiteral;
-	    }
+	public int getLiteral() {
+		return myLiteral;
+	}
 	   
-		/**
+	/**
 	 * Returns a string representation of the integer 
 	 * value of this Literal token.
 	 * @return String containing the integer value of this 
