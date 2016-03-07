@@ -12,7 +12,7 @@ public class LiteralToken extends Token {
 	 * 
 	 * @param value the value of the Literal token
 	 */
-	public LiteralToken(int value){
+	public LiteralToken(int value) {
 		myLiteral = value;
     }
     
