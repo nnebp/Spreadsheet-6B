@@ -1,8 +1,6 @@
 /**
  * CellToken class which extends Token. Stores the row and column number
  * of the cell as integers.
- * 
- * @author 
  */
 
 public class CellToken extends Token {
