@@ -14,25 +14,24 @@ public class LiteralToken extends Token {
 	 */
 	public LiteralToken(int value) {
 		myLiteral = value;
-    }
-    
-    /**
+	}
+	
+	/**
 	 * Returns the value of this Literal token.
 	 *
 	 * @return value of this Literal token
 	 */
-    public int getLiteral() {
-        return myLiteral;
-    
-    }
-    
-	/**
+	    public int getLiteral() {
+	        return myLiteral;
+	    }
+	   
+		/**
 	 * Returns a string representation of the integer 
 	 * value of this Literal token.
 	 * @return String containing the integer value of this 
 	 * Literal token
 	 */
-    public String toString() {
-    	return new Integer(myLiteral).toString();
-    }
+	public String toString() {
+		return new Integer(myLiteral).toString();
+	}
 }
