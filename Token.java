@@ -1,14 +1,9 @@
-
 /**
- * Abstract class Token - write a description of the class here
- * 
- * @author (your name here)
- * @version (version number or date here)
+ * Abstract class which is either a Literal, Cell, or 
+ * Operator token. 
  */
+
 public abstract class Token
 {
-    // instance variables - replace the example below with your own
-    private int x;
-
-
+	
 }
