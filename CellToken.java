@@ -6,9 +6,17 @@
 public class CellToken extends Token {
 	private int column; // column A = 0, B = 1, etc.
 	private int row;
-	 
+	
 	 /**
 	  * Default constructor.
+	  */
+	 public CellToken() {
+		 this.row = 0;
+		 this.column = 0;
+	 }
+	 
+	 /**
+	  * Parameterized constructor.
 	  * 
 	  * @param row row of the cell
 	  * @param column column of the cell
@@ -16,14 +24,6 @@ public class CellToken extends Token {
 	 public CellToken(int row, int column) {
 		 this.row = row;
 		 this.column = column;
-	 }
-	 
-	 /**
-	  * Parameterless constructor.
-	  */
-	 public CellToken() {
-		 this.row = 0;
-		 this.column = 0;
 	 }
 	 
 	 /**
