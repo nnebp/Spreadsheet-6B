@@ -5,7 +5,8 @@
  * (for the topological sort). The addresses of the nodes that must be 
  * evaluated before this node are stored in the dependencies linked list.
  * The addresses of the nodes that are dependent on this cell are also stored in
- * a linked list (dependentCells).
+ * a linked list (dependentCells). Each cell also contains a reference to it's 
+ * containing 2-d array.
  * 
  * @author Sandeep Heera
  *
@@ -371,9 +372,11 @@ public class Cell {
 	 * @return string containing value of the cell
 	 */
 	 public String toString() {
-		if (this.formula.equals(""))
-			return "";
-		
-	 	return Integer.toString(this.getValue());
+		if (this.formula.equals("")) {
+			return "";	
+		}
+		else {
+			return Integer.toString(this.getValue());	
+		}
 	 }
 }
